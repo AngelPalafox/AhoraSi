@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CodigoVerificacionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,9 +19,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/Envio_Codigo',[CodigoVerificacionController::class,'store'])->name('enviar');
+
+Route::get('/code', [CodigoVerificacionController::class, 'show'])->middleware('signed')->name('enviar');
+
+Route::post('/dashboard', [CodigoVerificacionController::class, 'Validar_codigo_login'])->name('Bienvenido');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'MiddlewareCode'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
